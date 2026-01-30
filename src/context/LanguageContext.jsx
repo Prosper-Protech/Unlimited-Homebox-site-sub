@@ -1,0 +1,25 @@
+import { createContext, useContext, useState, useEffect } from "react"
+
+const LanguageContext = createContext()
+
+export function LanguageProvider({ children }) {
+  const [lang, setLang] = useState("en")
+
+  useEffect(() => {
+    const saved = localStorage.getItem("lang")
+    if (saved) setLang(saved)
+  }, [])
+
+  const changeLang = (l) => {
+    setLang(l)
+    localStorage.setItem("lang", l)
+  }
+
+  return (
+    <LanguageContext.Provider value={{ lang, changeLang }}>
+      {children}
+    </LanguageContext.Provider>
+  )
+}
+
+export const useLanguage = () => useContext(LanguageContext)
